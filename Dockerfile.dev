@@ -1,0 +1,20 @@
+FROM ruby:2.4.1
+ENV LANG C.UTF-8
+RUN apt-get update -qq && apt-get install -y vim curl wget
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install -y apt-utils build-essential libpq-dev nodejs mysql-client
+
+RUN mkdir /myapp
+WORKDIR /myapp
+ADD Gemfile /myapp/Gemfile
+ADD Gemfile.lock /myapp/Gemfile.lock
+RUN bundle install -j4 --path=/bundle
+
+RUN npm install -g yarn
+ADD package.json /myapp/package.json
+ADD yarn.lock /myapp/yarn.lock
+RUN yarn
+
+ADD . /myapp
