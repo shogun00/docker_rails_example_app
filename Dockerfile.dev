@@ -18,3 +18,4 @@ ADD yarn.lock /myapp/yarn.lock
 RUN yarn
 
 ADD . /myapp
+
